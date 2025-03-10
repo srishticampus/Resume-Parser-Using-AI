@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Application</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: #f4f6f9;
+        }
+        .sidebar {
+            height: 100vh;
+            background: #343a40;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            width: 250px;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            transition: background 0.3s;
+        }
+        .sidebar a:hover {
+            background: #495057;
+        }
+        .content {
+            margin-left: 260px;
+            padding: 20px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        .badge {
+            font-size: 14px;
+            padding: 6px 10px;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h3>Admin Dashboard</h3>
+        <a href="{% url 'admin_dashboard' %}">📂 Dashboard</a>
+        <a href="{% url 'manage_applications' %}" class="active">📑 Manage Job Applications</a>
+        <a href="{% url 'search_candidates' %}">🔍 Search Candidates</a>
+        <a href="{% url 'analytics_dashboard' %}">📊 Reports & Analytics</a>
+        <a href="#">⚙️ Settings</a>
+        <a href="#" class="btn btn-danger mt-3">Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <h2>📄 Application Details</h2>
+        <p>Full details of the selected job application.</p>
+
+        <div class="card p-4">
+            <h5>👤 Applicant Name</h5>
+            <p>{{ application.name }}</p>
+
+            <h5>📧 Email</h5>
+            <p>{{ application.email }}</p>
+
+            <h5>🎯 Job Field</h5>
+            <p>{{ application.subject }}</p>
+
+            <h5>📝 Message</h5>
+            <p>{{ application.message }}</p>
+
+            <h5>📅 Submitted On</h5>
+            <p>{{ application.submitted_at }}</p>
+
+            <h5>📄 Resume Status</h5>
+            {% if application.resume %}
+                <span class="badge bg-success">Resume Available</span>
+            {% else %}
+                <span class="badge bg-danger">No Resume</span>
+            {% endif %}
+
+            <div class="mt-4">
+                <a href="{% url 'manage_applications' %}" class="btn btn-secondary">⬅ Back to Applications</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

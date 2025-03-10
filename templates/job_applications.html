@@ -1,0 +1,42 @@
+
+{% if success %}
+    <p style="color: green;">{{ success }}</p>
+{% endif %}
+<table border="1">
+    <thead>
+        <tr>
+            <th>Applicant Name</th>
+            <th>Email</th>
+            <th>Job Field</th>
+            <th>Resume</th>
+            <th>Extracted Name</th>
+            <th>Experience</th>
+            <th>Key Skills</th>
+            <th>Degree</th>
+            <th>Location</th>
+            <th>Submitted At</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for application in applications %}
+        <tr>
+            <td>{{ application.name }}</td>
+            <td>{{ application.email }}</td>
+            <td>{{ application.subject }}</td>
+            <td>
+                {% if application.resume %}
+                    <a href="{{ application.resume.url }}" target="_blank">Download</a>
+                {% else %}
+                    No Resume
+                {% endif %}
+            </td>
+            <td>{{ application.extractdetails.full_name|default:"N/A" }}</td>
+            <td>{{ application.extractdetails.total_experience|default:"N/A" }}</td>
+            <td>{{ application.extractdetails.key_skills|default:"N/A" }}</td>
+            <td>{{ application.extractdetails.degree|default:"N/A" }}</td>
+            <td>{{ application.extractdetails.location|default:"N/A" }}</td>
+            
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: #f4f6f9;
+        }
+        .sidebar {
+            height: 100vh;
+            background: #343a40;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            width: 250px;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            transition: background 0.3s;
+        }
+        .sidebar a:hover {
+            background: #495057;
+        }
+        .content {
+            margin-left: 260px;
+            padding: 20px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h3>Admin Dashboard</h3>
+        <a href="{% url 'admin_dashboard' %}">📂 Dashboard</a>
+        <a href="{% url 'manage_applications' %}">📑 Manage Job Applications</a>
+        <a href="{% url 'search_candidates' %}">🔍 Search Candidates</a>
+        <a href="{% url 'analytics_dashboard' %}" class="active">📊 Reports & Analytics</a>
+        <!-- <a href="#">⚙️ Settings</a> -->
+        <a href="{% url 'admin_logout' %}" class="btn btn-danger logout-btn">Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <h2>📊 Analytics Dashboard</h2>
+        <p>Key insights and statistics about job applicants.</p>
+
+        <!-- Total Applicants & Average Experience -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card p-3">
+                    <h5>👥 Total Applicants</h5>
+                    <p>{{ total_applicants }} applicants registered.</p>
+                </div>
+            </div>
+            <!-- <div class="col-md-4">
+                <div class="card p-3">
+                    <h5>📅 Average Experience</h5>
+                    <p>{{ average_experience }}</p>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- Pie Charts in Separate Rows -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card p-3">
+                    <h5>📊 Popular Job Fields</h5>
+                    <img src="{{ job_field_chart }}" class="img-fluid">
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card p-3">
+                    <h5>📍 Top Candidate Locations</h5>
+                    <img src="{{ location_chart }}" class="img-fluid">
+                </div>
+            </div>
+        </div> -->
+
+        <!-- Top Skills & Degree Distribution -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card p-3">
+                    <h5>🛠 Most Common Skills</h5>
+                    <ul>
+                        {% for skill, count in sorted_skills.items %}
+                            <li>{{ skill }} ({{ count }})</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card p-3">
+                    <h5>🎓 Candidates Per Degree</h5>
+                    <ul>
+                        {% for degree, count in degree_dict.items %}
+                            <li>{{ degree }} ({{ count }})</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
