@@ -1,0 +1,418 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+  
+  <!--==========================
+    Intro Section
+  ============================-->
+  <section id="intro">
+    <div class="intro-content">
+      <h2>Transforming <span>Data</span><br>Into Insights!</h2>
+      <div>
+        <a href="#about" class="btn-get-started scrollto">Get Started</a>
+        <a href="#portfolio" class="btn-projects scrollto">Our Projects</a>
+      </div>
+    </div>
+
+    <div id="intro-carousel" class="owl-carousel">
+      <div class="item" style="background-image: url('img/intro-carousel/1.jpg');"></div>
+      <div class="item" style="background-image: url('img/intro-carousel/2.jpg');"></div>
+      <div class="item" style="background-image: url('img/intro-carousel/3.jpg');"></div>
+      <div class="item" style="background-image: url('img/intro-carousel/4.jpg');"></div>
+      <div class="item" style="background-image: url('img/intro-carousel/5.jpg');"></div>
+    </div>
+  </section><!-- #intro -->
+
+  <main id="main">
+
+    <!--==========================
+      About Section
+    ============================-->
+    <section id="about" class="wow fadeInUp">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 about-img">
+            <img src="{% static 'img/about-img.jpg' %}" alt="About Image">
+          </div>
+
+          <div class="col-lg-6 content">
+            <h2>Empowering Businesses with Data-Driven Solutions</h2>
+            <h3>We provide cutting-edge data analytics and AI solutions to help businesses make informed decisions.</h3>
+
+            <ul>
+              <li><i class="ion-android-checkmark-circle"></i> Advanced data analytics to drive business growth and efficiency.</li>
+              <li><i class="ion-android-checkmark-circle"></i> AI-powered insights for predictive modeling and decision-making.</li>
+              <li><i class="ion-android-checkmark-circle"></i> Cloud-based solutions ensuring secure and scalable data management.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section><!-- #about -->
+
+    <!--==========================
+      Services Section
+    ============================-->
+    <section id="services">
+      <div class="container">
+        <div class="section-header">
+          <h2>Our Services</h2>
+          <p>We offer a range of data-driven solutions designed to optimize business performance, enhance decision-making, and improve operational efficiency.</p>
+        </div>
+
+        <div class="row">
+
+          <div class="col-lg-6">
+            <div class="box wow fadeInLeft">
+              <div class="icon"><i class="fa fa-bar-chart"></i></div>
+              <h4 class="title"><a href="">Data Analytics & Business Intelligence</a></h4>
+              <p class="description">Leverage real-time data insights to enhance your business strategies and drive growth.</p>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="box wow fadeInRight">
+              <div class="icon"><i class="fa fa-picture-o"></i></div>
+              <h4 class="title"><a href="">AI & Machine Learning Solutions</a></h4>
+              <p class="description">Implement AI-driven predictive models to automate decision-making and optimize processes.</p>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="box wow fadeInLeft" data-wow-delay="0.2s">
+              <div class="icon"><i class="fa fa-shopping-bag"></i></div>
+              <h4 class="title"><a href="">Cloud Data Management</a></h4>
+              <p class="description">Secure, scalable, and efficient cloud solutions for seamless data storage and processing.</p>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="box wow fadeInRight" data-wow-delay="0.2s">
+              <div class="icon"><i class="fa fa-map"></i></div>
+              <h4 class="title"><a href="">Cybersecurity & Compliance</a></h4>
+              <p class="description">Protect your business data with robust security measures and ensure compliance with industry regulations.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section><!-- #services -->
+
+    <!--==========================
+      Clients Section
+============================-->
+<section id="clients" class="wow fadeInUp">
+  <div class="container">
+    <div class="section-header">
+      <h2>Our Trusted Clients</h2>
+      <p>We have partnered with leading organizations across various industries, helping them leverage data for smarter business decisions.</p>
+    </div>
+    <div class="owl-carousel clients-carousel">
+      <img src="{% static 'img/clients/client-1.png' %}" alt="Client 1">
+      <img src="{% static 'img/clients/client-2.png' %}" alt="Client 2">
+      <img src="{% static 'img/clients/client-3.png' %}" alt="Client 3">
+      <img src="{% static 'img/clients/client-4.png' %}" alt="Client 4">
+      <img src="{% static 'img/clients/client-5.png' %}" alt="Client 5">
+      <img src="{% static 'img/clients/client-6.png' %}" alt="Client 6">
+      <img src="{% static 'img/clients/client-7.png' %}" alt="Client 7">
+      <img src="{% static 'img/clients/client-8.png' %}" alt="Client 8">
+    </div>
+  </div>
+</section><!-- #clients -->
+
+<!--==========================
+      Our Portfolio Section
+============================-->
+<section id="portfolio" class="wow fadeInUp">
+  <div class="container">
+    <div class="section-header">
+      <h2>Our Recent Projects</h2>
+      <p>Explore some of our cutting-edge data solutions that have transformed businesses across various industries.</p>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row no-gutters">
+
+      <div class="col-lg-3 col-md-4">
+        <div class="portfolio-item wow fadeInUp">
+          <a href="{% static 'img/portfolio/1.jpg' %}" class="portfolio-popup">
+            <img src="{% static 'img/portfolio/1.jpg' %}" alt="Enterprise Data Analytics">
+            <div class="portfolio-overlay">
+              <div class="portfolio-info"><h2 class="wow fadeInUp">Enterprise Data Analytics</h2></div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-4">
+        <div class="portfolio-item wow fadeInUp">
+          <a href="{% static 'img/portfolio/2.jpg' %}" class="portfolio-popup">
+            <img src="{% static 'img/portfolio/2.jpg' %}" alt="AI-Powered Prediction Models">
+            <div class="portfolio-overlay">
+              <div class="portfolio-info"><h2 class="wow fadeInUp">AI-Powered Prediction Models</h2></div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-4">
+        <div class="portfolio-item wow fadeInUp">
+          <a href="{% static 'img/portfolio/3.jpg' %}" class="portfolio-popup">
+            <img src="{% static 'img/portfolio/3.jpg' %}" alt="Cloud Data Infrastructure">
+            <div class="portfolio-overlay">
+              <div class="portfolio-info"><h2 class="wow fadeInUp">Cloud Data Infrastructure</h2></div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-4">
+        <div class="portfolio-item wow fadeInUp">
+          <a href="{% static 'img/portfolio/4.jpg' %}" class="portfolio-popup">
+            <img src="{% static 'img/portfolio/4.jpg' %}" alt="Cybersecurity & Compliance">
+            <div class="portfolio-overlay">
+              <div class="portfolio-info"><h2 class="wow fadeInUp">Cybersecurity & Compliance</h2></div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-4">
+        <div class="portfolio-item wow fadeInUp">
+          <a href="{% static 'img/portfolio/5.jpg' %}" class="portfolio-popup">
+            <img src="{% static 'img/portfolio/5.jpg' %}" alt="IoT & Smart Data Solutions">
+            <div class="portfolio-overlay">
+              <div class="portfolio-info"><h2 class="wow fadeInUp">IoT & Smart Data Solutions</h2></div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-4">
+        <div class="portfolio-item wow fadeInUp">
+          <a href="{% static 'img/portfolio/6.jpg' %}" class="portfolio-popup">
+            <img src="{% static 'img/portfolio/6.jpg' %}" alt="Retail & E-commerce Analytics">
+            <div class="portfolio-overlay">
+              <div class="portfolio-info"><h2 class="wow fadeInUp">Retail & E-commerce Analytics</h2></div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-4">
+        <div class="portfolio-item wow fadeInUp">
+          <a href="{% static 'img/portfolio/7.jpg' %}" class="portfolio-popup">
+            <img src="{% static 'img/portfolio/7.jpg' %}" alt="Healthcare Data Optimization">
+            <div class="portfolio-overlay">
+              <div class="portfolio-info"><h2 class="wow fadeInUp">Healthcare Data Optimization</h2></div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-4">
+        <div class="portfolio-item wow fadeInUp">
+          <a href="{% static 'img/portfolio/8.jpg' %}" class="portfolio-popup">
+            <img src="{% static 'img/portfolio/8.jpg' %}" alt="Financial Risk & Insights">
+            <div class="portfolio-overlay">
+              <div class="portfolio-info"><h2 class="wow fadeInUp">Financial Risk & Insights</h2></div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section><!-- #portfolio -->
+
+<!--==========================
+      Testimonials Section
+    ============================-->
+    <section id="testimonials" class="wow fadeInUp">
+      <div class="container">
+        <div class="section-header">
+          <h2>Testimonials</h2>
+          <p>See what our clients say about us. We are committed to delivering excellence and exceeding expectations.</p>
+        </div>
+        <div class="owl-carousel testimonials-carousel">
+
+            <div class="testimonial-item">
+              <p>
+                <img src="{% static 'img/quote-sign-left.png' %}" class="quote-sign-left" alt="">
+                "The team provided exceptional service and delivered beyond our expectations. Highly recommended!"
+                <img src="{% static 'img/quote-sign-right.png' %}" class="quote-sign-right" alt="">
+              </p>
+              <img src="{% static 'img/testimonial-1.jpg' %}" class="testimonial-img" alt="">
+              <h3>Emily Johnson</h3>
+              <h4>CEO, Tech Solutions</h4>
+            </div>
+
+            <div class="testimonial-item">
+              <p>
+                <img src="{% static 'img/quote-sign-left.png' %}" class="quote-sign-left" alt="">
+                "Professional, efficient, and creative! Our project was handled with utmost dedication."
+                <img src="{% static 'img/quote-sign-right.png' %}" class="quote-sign-right" alt="">
+              </p>
+              <img src="{% static 'img/testimonial-2.jpg' %}" class="testimonial-img" alt="">
+              <h3>Michael Brown</h3>
+              <h4>Marketing Director</h4>
+            </div>
+
+            <div class="testimonial-item">
+              <p>
+                <img src="{% static 'img/quote-sign-left.png' %}" class="quote-sign-left" alt="">
+                "Amazing attention to detail and a team that truly listens to client needs."
+                <img src="{% static 'img/quote-sign-right.png' %}" class="quote-sign-right" alt="">
+              </p>
+              <img src="{% static 'img/testimonial-3.jpg' %}" class="testimonial-img" alt="">
+              <h3>Sarah Williams</h3>
+              <h4>Creative Director</h4>
+            </div>
+
+        </div>
+      </div>
+    </section><!-- #testimonials -->
+
+    <!--==========================
+      Call To Action Section
+    ============================-->
+    <section id="call-to-action" class="wow fadeInUp">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-9 text-center text-lg-left">
+            <h3 class="cta-title">Let's Build Something Great</h3>
+            <p class="cta-text">Partner with us to create innovative and impactful solutions. Get in touch today and let's make something amazing together.</p>
+          </div>
+          <div class="col-lg-3 cta-btn-container text-center">
+            <a class="cta-btn align-middle" href="#contact">Get Started</a>
+          </div>
+        </div>
+      </div>
+    </section><!-- #call-to-action -->
+
+    <!--==========================
+      Our Team Section
+    ============================-->
+    <section id="team" class="wow fadeInUp">
+      <div class="container">
+        <div class="section-header">
+          <h2>Meet Our Team</h2>
+        </div>
+        <div class="row">
+          <div class="col-lg-3 col-md-6">
+            <div class="member">
+                <div class="pic"><img src="{% static 'img/team-1.jpg' %}" alt=""></div>
+              <div class="details">
+                <h4>Alex Carter</h4>
+                <span>Chief Executive Officer</span>
+                <div class="social">
+                  <a href=""><i class="fa fa-twitter"></i></a>
+                  <a href=""><i class="fa fa-facebook"></i></a>
+                  <a href=""><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="member">
+                <div class="pic"><img src="{% static 'img/team-2.jpg' %}" alt=""></div>
+              <div class="details">
+                <h4>Jessica Lee</h4>
+                <span>Head of Product</span>
+                <div class="social">
+                  <a href=""><i class="fa fa-twitter"></i></a>
+                  <a href=""><i class="fa fa-facebook"></i></a>
+                  <a href=""><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="member">
+                <div class="pic"><img src="{% static 'img/team-3.jpg' %}" alt=""></div>
+              <div class="details">
+                <h4>David Mitchell</h4>
+                <span>Chief Technology Officer</span>
+                <div class="social">
+                  <a href=""><i class="fa fa-twitter"></i></a>
+                  <a href=""><i class="fa fa-facebook"></i></a>
+                  <a href=""><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="member">
+                <div class="pic"><img src="{% static 'img/team-4.jpg' %}" alt=""></div>
+              <div class="details">
+                <h4>Emma Roberts</h4>
+                <span>Finance Manager</span>
+                <div class="social">
+                  <a href=""><i class="fa fa-twitter"></i></a>
+                  <a href=""><i class="fa fa-facebook"></i></a>
+                  <a href=""><i class="fa fa-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section><!-- #team -->
+
+    <!--==========================
+      Contact Section
+    ============================-->
+    <section id="contact" class="wow fadeInUp">
+      <div class="container">
+        <div class="section-header">
+          <h2>Contact Us</h2>
+          <p>Get in touch with us for any inquiries, collaborations, or support. Our team is ready to assist you with your needs. Reach out via phone, email, or visit our location—we’d love to hear from you!"</p>
+        </div>
+
+        <div class="row contact-info">
+
+          <div class="col-md-4">
+            <div class="contact-address">
+              <i class="ion-ios-location-outline"></i>
+              <h3>Address</h3>
+              <address>A108 Adam Street, NY 535022, USA</address>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="contact-phone">
+              <i class="ion-ios-telephone-outline"></i>
+              <h3>Phone Number</h3>
+              <p><a href="tel:+155895548855">+1 5589 55488 55</a></p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="contact-email">
+              <i class="ion-ios-email-outline"></i>
+              <h3>Email</h3>
+              <p><a href="mailto:info@example.com">info@example.com</a></p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="container mb-4">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d22864.11283411948!2d-73.96468908098944!3d40.630720240038435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew+York%2C+NY%2C+USA!5e0!3m2!1sen!2sbg!4v1540447494452" width="100%" height="380" frameborder="0" style="border:0" allowfullscreen></iframe>
+      </div>
+
+      
+    </section><!-- #contact -->
+
+  </main>
+
+
+
+{% endblock %}
