@@ -1,0 +1,12 @@
+services:
+  django_backend:
+    build: ./
+    container_name: resume_parser_django
+    volumes:
+      - ./:/code  # Maps the host's directory to /code in the container
+      - ./media:/code/media
+      - ./db.sqlite3:/code/db.sqlite3
+      - ./staticfiles:/code/staticfiles  # Maps the host's staticfiles directory to /code/staticfiles in the container
+    ports:
+      - "8008:8000"
+    restart: always

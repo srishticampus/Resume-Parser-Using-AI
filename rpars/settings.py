@@ -26,8 +26,8 @@ SECRET_KEY = 'django-insecure-k0e@4)@(x#@ql50c%o3co%t(v8yfess-)62en$(@%9trof0@b9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['localhost','0.0.0.0','python.sicsglobal.com']
+#FORCE_SCRIPT_NAME = 'resume_parser'
 
 # Application definition
 
@@ -122,6 +122,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR , 'static')
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')

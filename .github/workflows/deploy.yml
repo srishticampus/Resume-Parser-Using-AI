@@ -1,0 +1,113 @@
+name: Deploy Django Resume Parser Project
+
+on:
+  push:
+    branches:
+      - docker-setup  # Trigger deployment when code is pushed to the `docker-setup` branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: SSH into the server and clean up the target directory (preserve media folder and db.sqlite3)
+      - name: Clean up server directory (preserve media and db.sqlite3)
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            cd /var/www/python.sicsglobal.com/resume_parser/
+
+            # Move files and folders to preserve to a temporary directory
+            mkdir -p .temp
+            mv db.sqlite3 .temp/db.sqlite3
+            mv media .temp/media
+
+            # Delete all files and subdirectories except the .temp directory
+            find . -mindepth 1 -maxdepth 1 ! -name '.temp' -exec rm -rf {} +
+
+            # Move preserved files and folders back to their original locations
+            mv .temp/db.sqlite3 .
+            mv .temp/media .
+
+            # Clean up the temporary directory
+            rm -rf .temp
+
+      # Step 3: Copy files to the server using SCP with password authentication
+      - name: Copy files to server
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          source: "./"
+          target: "/var/www/python.sicsglobal.com/resume_parser/"
+          strip_components: 1  # Remove the top-level directory when copying
+          overwrite: true  # Allow overwriting existing files
+          tar_tmp_path: /tmp  # Use a writable temporary directory
+          tar_exec: "tar"  # Use tar without sudo
+
+      # Step 4: SSH into the server and deploy the application using docker-compose
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            cd /var/www/python.sicsglobal.com/resume_parser/
+
+            # Stop and remove existing containers
+            docker-compose down
+
+            # Build and start new containers
+            docker-compose up -d --build
+
+      # Step 5: Verify deployment
+      - name: Verify deployment
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            # Check if the web container is running
+            if ! docker ps --filter "name=resume_parser_django" --format "{{.Status}}" | grep -q "Up"; then
+              echo "Web container is not running. Rolling back..."
+              exit 1
+            fi
+
+            echo "Deployment verified successfully."
+
+      # Step 6: Rollback in case of failure
+      - name: Rollback on failure
+        if: failure()  # Run this step only if any previous step fails
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+            host: ${{ secrets.SERVER_HOST }}
+            username: ${{ secrets.SERVER_USERNAME }}
+            password: ${{ secrets.SERVER_PASSWORD }}
+            script: |
+                cd /var/www/python.sicsglobal.com/resume_parser/
+
+                # Stop and remove any partially deployed containers
+                docker-compose down
+
+                # Restore the backup of media and db.sqlite3
+                if [ -d ".temp" ]; then
+                    mv .temp/db.sqlite3 .
+                    mv .temp/media .
+                else
+                    echo "No backup found in .temp directory. Skipping rollback."
+                fi
+
+                # Start the previous working containers
+                docker-compose up -d
+
+                echo "Rollback completed successfully."
