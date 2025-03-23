@@ -4,6 +4,7 @@ import google.generativeai as genai
 import re
 import nltk
 from datetime import datetime
+from docx import Document  # DOCX support
 
 # Ensure NLTK tokenizer is ready
 nltk.download('punkt')
@@ -24,6 +25,14 @@ def extract_text_from_pdf(pdf_path):
 def extract_text_from_txt(txt_path):
     with open(txt_path, "r", encoding="utf-8") as file:
         return file.read().strip()
+
+
+def extract_text_from_docx(docx_path):
+    doc = Document(docx_path)
+    text = "\n".join([paragraph.text for paragraph in doc.paragraphs])
+    return text.strip()
+
+
 
 # Function to calculate experience duration based on start & end date
 def calculate_experience(start_date, end_date="Present"):
@@ -125,8 +134,10 @@ def process_resume(file_path):
         resume_text = extract_text_from_pdf(file_path)
     elif file_path.endswith(".txt"):
         resume_text = extract_text_from_txt(file_path)
+    elif file_path.endswith(".docx"):
+        resume_text = extract_text_from_docx(file_path)
     else:
-        print("Unsupported file format. Please provide a PDF or TXT file.")
+        print("Unsupported file format. Please provide a PDF, DOCX, or TXT file.")
         return
 
     # Get structured details using Gemini

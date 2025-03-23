@@ -41,6 +41,11 @@ import os
 from django.shortcuts import render, redirect
 from .models import JobApplication, ExtractDetails
 from .resume_parser import process_resume, extract_filtered_details_with_gemini  # Import resume parsing functions
+from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from django.contrib import messages
+
+
 
 def job_application_view(request):
     if request.method == 'POST':
@@ -50,10 +55,20 @@ def job_application_view(request):
         message = request.POST.get('message')
         resume_file = request.FILES.get('resume')  # Get uploaded file
 
+
+        # Sending Email
+        send_mail(
+            subject="Application Sent Successfully",
+            message=f"Dear {name},\n\nYour application for {subject} has been received successfully.\n\nBest Regards,\nCompany Name",
+            from_email='shihabameen386@gmail.com',
+            recipient_list=[email],
+            fail_silently=False,
+        )
+
         print(f'data: name={name},email = {email},sub = {subject},resume={resume_file}')
 
         if not (name and email and subject and resume_file):
-            return render(request, 'job_applications.html', {'error': 'All fields are required!'})
+            return render(request, 'career.html', {'error': 'All fields are required!'})
 
         # Save job application
         job_application = JobApplication(
@@ -111,11 +126,40 @@ def job_application_view(request):
             )
 
             # return render(request, 'job_applications.html', {'success': 'Application submitted successfully!'})
-            messages.success(request,'Submitted Successfully')
+            messages.success(request, "Application sent successfully! Check your email for confirmation.")
+        else:
+            messages.error(request, "The Application is not Submitted")
     applications = JobApplication.objects.all().order_by('-submitted_at')  # Latest applications first
     return render(request, 'career.html')
 
 
+
+
+# def register(request):
+#     if request.method == "POST":
+#         print('-----------------------cddd')
+#         name = request.POST.get('name')
+#         email = request.POST.get('email')
+#         subject = request.POST.get('subject')
+#         message = request.POST.get('message')
+#         resume = request.FILES.get('resume')  # Handling uploaded file
+        
+#         # Save form data to the database (optional)
+#         # Example: Application.objects.create(name=name, email=email, subject=subject, message=message, resume=resume)
+
+#         # Sending Email
+#         send_mail(
+#             subject="Application Sent Successfully",
+#             message=f"Dear {name},\n\nYour application for {subject} has been received successfully.\n\nBest Regards,\nCompany Name",
+#             from_email='careers.reveal@gmail.com',
+#             recipient_list=[email],
+#             fail_silently=False,
+#         )
+
+#         messages.success(request, "Application sent successfully! Check your email for confirmation.")
+#         return redirect('register')
+
+#     return render(request, 'register.html')
 
 
 
@@ -336,7 +380,7 @@ def analytics_dashboard(request):
     # Popular Job Fields
     job_fields = JobApplication.objects.values('subject').annotate(count=Count('subject')).order_by('-count')
     job_field_dict = {entry['subject']: entry['count'] for entry in job_fields}
-
+    print(job_field_dict)
     # Top Locations
     top_locations = ExtractDetails.objects.values('location').annotate(count=Count('location')).order_by('-count')[:5]
     location_dict = {entry['location']: entry['count'] for entry in top_locations}
