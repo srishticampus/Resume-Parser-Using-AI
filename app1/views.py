@@ -56,14 +56,27 @@ def job_application_view(request):
         resume_file = request.FILES.get('resume')  # Get uploaded file
 
 
-        # Sending Email
         send_mail(
-            subject="Application Sent Successfully",
-            message=f"Dear {name},\n\nYour application for {subject} has been received successfully.\n\nBest Regards,\nCompany Name",
-            from_email='shihabameen386@gmail.com',
-            recipient_list=[email],
-            fail_silently=False,
-        )
+            subject=f"Application Confirmation - {subject}",
+            message=f"""Dear {name},
+
+            Thank you for applying for the {subject} position at Company Name. 
+
+            We’ve received your application and our team is currently reviewing your profile. If your qualifications match our requirements, we’ll be in touch soon to discuss the next steps. 
+
+            In the meantime, if you have any questions, please feel free to reach out to us at support@companyname.com.
+
+            We appreciate your interest in joining our team and wish you the best of luck in the hiring process.
+
+            Best regards,  
+            Recruitment Team  
+            DataRevel
+            www.Datareveal.com  
+            """,
+                from_email='shihabameen386@gmail.com',
+                recipient_list=[email],
+                fail_silently=False,
+            )
 
         print(f'data: name={name},email = {email},sub = {subject},resume={resume_file}')
 
