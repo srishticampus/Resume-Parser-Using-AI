@@ -14,6 +14,10 @@ urlpatterns =[
     path('view-application/<int:application_id>/', views.view_application, name='view_application'),
     path("login/", views.admin_login, name="admin_login"),
     path("logout/", views.admin_logout, name="admin_logout"),
+    path('delete-application/<int:application_id>/', views.delete_application, name='delete_application'),
+
+    # path('register/', register, name='register'),
+
 
 
 
