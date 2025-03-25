@@ -435,3 +435,15 @@ from .models import JobApplication
 def view_application(request, application_id):
     application = get_object_or_404(JobApplication, id=application_id)
     return render(request, 'view_application.html', {'application': application})
+
+
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .models import JobApplication
+
+def delete_application(request, application_id):
+    if request.method == 'DELETE':
+        application = get_object_or_404(JobApplication, id=application_id)
+        application.delete()
+        return JsonResponse({'message': 'Application deleted successfully!'})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
