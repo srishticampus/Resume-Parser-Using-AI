@@ -36,7 +36,14 @@ class ExtractDetails(models.Model):
     degree = models.CharField(max_length=255)  # Example: "BE in Electronics and Communication"
     additional_qualification = models.CharField(max_length=255, null=True, blank=True)  # Example: "Diploma in Embedded System"
     location = models.TextField()  # Can store address as a long string
+    email_sent = models.BooleanField(default=False)
 
     def __str__(self):
         return self.full_name
 
+class SelectedCandidate(models.Model):
+    candidate = models.ForeignKey(ExtractDetails, on_delete=models.CASCADE)
+    selected_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.candidate.full_name
