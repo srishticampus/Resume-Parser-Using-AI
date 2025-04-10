@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import JobApplication,ExtractDetails
+from .models import JobApplication,ExtractDetails,SelectedCandidate
 
 
 
@@ -16,3 +16,10 @@ class ExtractDetailsAdmin(admin.ModelAdmin):
     list_display = ("full_name", "total_experience", "key_skills", "degree", "location")
     search_fields = ("full_name", "total_experience", "key_skills", "degree", "location")
     list_filter = ("total_experience", "degree", "location")
+
+
+@admin.register(SelectedCandidate)
+class SelectedCandidateAdmin(admin.ModelAdmin):
+    list_display = ("candidate", "selected_at")
+    search_fields = ("candidate__full_name",)
+    list_filter = ("selected_at",)

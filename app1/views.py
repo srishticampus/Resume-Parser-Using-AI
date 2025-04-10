@@ -296,25 +296,32 @@ def normalize_degree(degree):
                 return value  # Return standardized name (e.g., 'B.Tech')
     return degree  # Return as-is if no match is found
 
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import ExtractDetails, SelectedCandidate
+# from .utils import normalize_degree, parse_experience  # Assuming you have these utilities
+
 def search_candidates(request):
     candidates = None  # Default: No candidates displayed
 
-    # Get filter values from request
+    # --- Handle Selection ---
+    if request.method == "POST":
+        candidate_id = request.POST.get("candidate_id")
+        candidate = get_object_or_404(ExtractDetails, id=candidate_id)
+        SelectedCandidate.objects.get_or_create(candidate=candidate)
+        return redirect('search_candidates')  # Replace with your URL name
+
+    # --- Filtering Logic ---
     name_query = request.GET.get('name', '').strip()
     location_query = request.GET.get('location', '').strip()
     experience_query = request.GET.get('experience', '').strip()
     skills_query = request.GET.get('skills', '').strip()
     degree_query = request.GET.get('degree', '').strip()
 
-    # Normalize the degree query for better matching
     normalized_degree_query = normalize_degree(degree_query)
-    print(f"Normalized Degree Query: {normalized_degree_query}")  # Debugging
 
-    # Check if any search parameter is entered
     if name_query or location_query or experience_query or skills_query or degree_query:
         candidates = ExtractDetails.objects.all()
 
-        # Apply filters dynamically
         if name_query:
             candidates = candidates.filter(full_name__icontains=name_query)
         if location_query:
@@ -322,44 +329,133 @@ def search_candidates(request):
         if skills_query:
             candidates = candidates.filter(key_skills__icontains=skills_query)
 
-        # Apply degree filter: Check for all variations of the degree
         if degree_query:
-            degree_variations = [normalized_degree_query]  # Start with normalized query
+            degree_variations = [normalized_degree_query]
             for key, value in DEGREE_MAPPING.items():
                 if value == normalized_degree_query:
-                    degree_variations.append(key)  # Add all known variations
-
-            # Filter candidates based on any of these variations
+                    degree_variations.append(key)
             candidates = candidates.filter(degree__iregex=r"|".join(degree_variations))
 
-        # Apply experience filter (greater than or equal to the selected value)
         if experience_query:
             try:
-                exp_value = int(experience_query)  # Convert input to an integer
+                exp_value = int(experience_query)
                 filtered_candidates = []
                 for candidate in candidates:
-                    candidate_exp = parse_experience(candidate.total_experience)  # Extract numeric experience
-                    
-                    if exp_value == 0:  # If 'Fresher' is selected, match 0 and 0-1 years
+                    candidate_exp = parse_experience(candidate.total_experience)
+                    if exp_value == 0:
                         if candidate_exp == 0:
                             filtered_candidates.append(candidate)
-                    else:  # Otherwise, filter by "greater than or equal to"
+                    else:
                         if candidate_exp >= exp_value:
                             filtered_candidates.append(candidate)
-
-                candidates = filtered_candidates  # Update queryset with filtered list
+                candidates = filtered_candidates
             except ValueError:
-                pass  # Ignore invalid experience inputs
+                pass
+
+    # --- Get Selected Candidates ---
+    selected_candidates = SelectedCandidate.objects.all()
+
     return render(request, 'search_candidates.html', {
         'candidates': candidates,
+        'selected_candidates': selected_candidates,
         'name_query': name_query,
         'location_query': location_query,
         'experience_query': experience_query,
         'skills_query': skills_query,
-        'degree_query': degree_query
+        'degree_query': degree_query,
     })
 
+def selected_candidates_view(request):
+    selected_candidates = SelectedCandidate.objects.select_related('candidate')
+    
+    candidate_application_map = {}
+    for sc in selected_candidates:
+        application = JobApplication.objects.filter(extractdetails=sc.candidate).first()
+        candidate_application_map[sc.id] = application.id if application else None
 
+    return render(request, 'selected_candidates.html', {
+        'selected_candidates': selected_candidates,
+        'application_ids': candidate_application_map,
+    })
+
+from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from .models import ExtractDetails
+
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404, redirect
+from .models import ExtractDetails
+
+def send_shortlist_email(request, candidate_id):
+    candidate = get_object_or_404(ExtractDetails, id=candidate_id)
+
+    # If already sent, stop here
+    if candidate.email_sent:
+        messages.warning(request, f"Shortlist email has already been sent to {candidate.full_name}.")
+        return redirect('candidate_detail', pk=candidate.id)
+
+    # Send the email
+    subject = "📢 You're Shortlisted for the Next Round - DataRevel"
+    message = f"""Dear {candidate.full_name},
+
+Congratulations! 🎉
+
+Your profile has been *shortlisted* for the next phase of the selection process at **DataRevel**.
+
+Our team was impressed with your qualifications and experience, and we look forward to speaking with you soon. A member of our recruitment team will reach out to you shortly with further steps.
+
+If you have any questions, please feel free to contact us at support@datarevel.com.
+
+Warm regards,  
+Recruitment Team  
+DataRevel  
+🌐 www.datarevel.com
+"""
+
+    send_mail(
+        subject=subject,
+        message=message,
+        from_email='shihabameen386@gmail.com',
+        recipient_list=[candidate.resume.email],
+        fail_silently=False,
+    )
+
+    # Mark as sent
+    candidate.email_sent = True
+    candidate.save()
+
+    messages.success(request, f"Shortlist email sent to {candidate.full_name}.")
+    return redirect('candidate_detail', pk=candidate.id)
+
+
+def delete_selected_candidate(request, selected_candidate_id):
+    if request.method == 'POST':
+        candidate = get_object_or_404(SelectedCandidate, id=selected_candidate_id)
+        candidate.delete()
+        messages.success(request, "Candidate has been deleted successfully.")
+    return redirect('selected_candidates')
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+@csrf_exempt
+def select_candidate_ajax(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        candidate_id = data.get('candidate_id')
+
+        if candidate_id:
+            candidate = get_object_or_404(ExtractDetails, id=candidate_id)
+
+            if SelectedCandidate.objects.filter(candidate=candidate).exists():
+                return JsonResponse({'success': False, 'message': 'Candidate already selected.'})
+
+            SelectedCandidate.objects.create(candidate=candidate)
+            return JsonResponse({'success': True, 'message': 'Candidate selected successfully.'})
+
+    return JsonResponse({'success': False, 'message': 'Invalid request.'})
 
 from django.shortcuts import render
 from django.db.models import Count
@@ -449,6 +545,10 @@ def view_application(request, application_id):
     application = get_object_or_404(JobApplication, id=application_id)
     return render(request, 'view_application.html', {'application': application})
 
+
+def candidate_detail(request, pk):
+    candidate = get_object_or_404(ExtractDetails, pk=pk)
+    return render(request, 'candidate_detail.html', {'candidate': candidate})
 
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404

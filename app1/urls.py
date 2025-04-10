@@ -15,8 +15,13 @@ urlpatterns =[
     path("login/", views.admin_login, name="admin_login"),
     path("logout/", views.admin_logout, name="admin_logout"),
     path('delete-application/<int:application_id>/', views.delete_application, name='delete_application'),
+    path('select-candidate/', views.select_candidate_ajax, name='select_candidate_ajax'),
+    path('selected-candidates/', views.selected_candidates_view, name='selected_candidates'),
+    path('candidate/<int:pk>/', views.candidate_detail, name='candidate_detail'),
+    path('send-email/<int:candidate_id>/', views.send_shortlist_email, name='send_shortlist_email'),
+    path('delete-selected-candidate/<int:selected_candidate_id>/', views.delete_selected_candidate, name='delete_selected_candidate'),
 
-    # path('register/', register, name='register'),
+
 
 
 

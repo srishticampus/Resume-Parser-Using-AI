@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Candidates</title>
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
     <style>
         body {
             background: #f4f6f9;
@@ -35,20 +33,11 @@
             margin-left: 260px;
             padding: 20px;
         }
-        .card {
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
-        }
         .filter-section {
             background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        .table-responsive {
-            border-radius: 10px;
-            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         .table thead {
             background: #343a40;
@@ -67,125 +56,182 @@
     </style>
 </head>
 <body>
-    
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h3>Admin Dashboard</h3>
-        <a href="{% url 'admin_dashboard' %}">📂 Dashboard</a>
-        <a href="{% url 'manage_applications' %}">📑 Manage Job Applications</a>
-        <a href="{% url 'search_candidates' %}" class="active">🔍 Search Candidates</a>
-        <a href="{% url 'analytics_dashboard' %}">📊 Reports & Analytics</a>
-        <!-- <a href="#">⚙️ Settings</a> -->
-        <a href="{% url 'admin_logout' %}" class="btn btn-danger logout-btn">Logout</a>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h3>Admin Dashboard</h3>
+    <a href="{% url 'admin_dashboard' %}">📂 Dashboard</a>
+    <a href="{% url 'manage_applications' %}">📑 Manage Job Applications</a>
+    <a href="{% url 'search_candidates' %}" class="active">🔍 Search Candidates</a>
+    <a href="{% url 'selected_candidates' %}" >✅ Selected Candidates</a>
+
+    <a href="{% url 'analytics_dashboard' %}">📊 Reports & Analytics</a>
+    <a href="{% url 'admin_logout' %}" class="btn btn-danger logout-btn">Logout</a>
+</div>
+
+<!-- Main Content -->
+<div class="content">
+    <h2>🔍 Search Candidates</h2>
+
+    <!-- Message Placeholder -->
+    <div id="successMessage" class="alert alert-dismissible fade show" role="alert" style="display: none;"></div>
+
+    <!-- Collapsible Search Filters -->
+    <button class="btn btn-dark mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#filterSection">
+        🔍 Show/Hide Filters
+    </button>
+
+    <div class="collapse show" id="filterSection">
+        <div class="filter-section">
+            <h5>🔎 Filter Candidates</h5>
+            <form method="GET">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="fw-bold">👤 Name</label>
+                        <input type="text" name="name" class="form-control" value="{{ name_query }}" placeholder="Enter name">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="fw-bold">📍 Location</label>
+                        <input type="text" name="location" class="form-control" value="{{ location_query }}" placeholder="Enter location">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="fw-bold">📅 Experience</label>
+                        <select name="experience" class="form-control">
+                            <option value="">Select Experience</option>
+                            <option value="0" {% if experience_query == "0" %}selected{% endif %}>Fresher</option>
+                            <option value="1" {% if experience_query == "1" %}selected{% endif %}>1+ years</option>
+                            <option value="2" {% if experience_query == "2" %}selected{% endif %}>2+ years</option>
+                            <option value="3" {% if experience_query == "3" %}selected{% endif %}>3+ years</option>
+                            <option value="5" {% if experience_query == "5" %}selected{% endif %}>5+ years</option>
+                            <option value="10" {% if experience_query == "10" %}selected{% endif %}>10+ years</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="fw-bold">🛠 Key Skills</label>
+                        <input type="text" name="skills" class="form-control" value="{{ skills_query }}" placeholder="e.g. Python, Django">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="fw-bold">🎓 Degree</label>
+                        <select name="degree" class="form-control">
+                            <option value="">Select Degree</option>
+                            <option value="Bachelor of Science" {% if degree_query == "Bachelor of Science" %}selected{% endif %}>Bsc</option>
+                            <option value="Master of Science" {% if degree_query == "Master of Science" %}selected{% endif %}>Msc</option>
+                            <option value="BE" {% if degree_query == "BE" %}selected{% endif %}>B.E</option>
+                            <option value="B.Tech" {% if degree_query == "B.Tech" %}selected{% endif %}>B.Tech</option>
+                            <option value="M.Tech" {% if degree_query == "M.Tech" %}selected{% endif %}>M.Tech</option>
+                            <option value="MCA" {% if degree_query == "MCA" %}selected{% endif %}>MCA</option>
+                            <option value="MBA" {% if degree_query == "MBA" %}selected{% endif %}>MBA</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">🔍 Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="content">
-        <h2>🔍 Search Candidates</h2>
-
-        <!-- Collapsible Search Filters -->
-        <button class="btn btn-dark mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#filterSection">
-            🔍 Show/Hide Filters
-        </button>
-
-        <div class="collapse show" id="filterSection">
-            <div class="filter-section">
-                <h5>🔎 Filter Candidates</h5>
-                <form method="GET">
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label class="fw-bold">👤 Name</label>
-                            <input type="text" name="name" class="form-control" value="{{ name_query }}" placeholder="Enter name">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="fw-bold">📍 Location</label>
-                            <input type="text" name="location" class="form-control" value="{{ location_query }}" placeholder="Enter location">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="fw-bold">📅 Experience</label>
-                            <select name="experience" class="form-control">
-                                <option value="">Select Experience</option>
-                                <option value="0" {% if experience_query == "0" %}selected{% endif %}>Fresher</option>
-                                <option value="1" {% if experience_query == "1" %}selected{% endif %}>1+ years</option>
-                                <option value="2" {% if experience_query == "2" %}selected{% endif %}>2+ years</option>
-                                <option value="3" {% if experience_query == "3" %}selected{% endif %}>3+ years</option>
-                                <option value="5" {% if experience_query == "5" %}selected{% endif %}>5+ years</option>
-                                <option value="10" {% if experience_query == "10" %}selected{% endif %}>10+ years</option>
-                            </select>
-                        </div>
-                        
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label class="fw-bold">🛠 Key Skills</label>
-                            <input type="text" name="skills" class="form-control" value="{{ skills_query }}" placeholder="e.g. Python, Django">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="fw-bold">🎓 Degree</label>
-                            <select name="degree" class="form-control">
-                                <option value="">Select Degree</option>
-                                <option value="Bachelor of Science" {% if degree_query == "Bachelor of Science" %}selected{% endif %}>Bsc</option>
-                                <option value="Master of Science" {% if degree_query == "Master of Science" %}selected{% endif %}>Msc</option>
-                                <option value="BE" {% if degree_query == "BE" %}selected{% endif %}>B.E</option>
-                                <option value="B.Tech" {% if degree_query == "B.Tech" %}selected{% endif %}>B.Tech</option>
-                                <option value="M.Tech" {% if degree_query == "M.Tech" %}selected{% endif %}>M.Tech</option>
-                                <option value="MCA" {% if degree_query == "MCA" %}selected{% endif %}>MCA</option>
-                                <option value="MBA" {% if degree_query == "MBA" %}selected{% endif %}>MBA</option>
-                            </select>
-                        
-                        <div class="col-md-4 d-flex align-items-end">
-                            <button type="submit" class="btn btn-primary w-100">🔍 Search</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Candidates Table (Only Show After Search) -->
-        {% if candidates %}
-        <div class="table-responsive mt-4">
-            <h5>👥 Search Results</h5>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Full Name</th>
-                        <th>Experience</th>
-                        <th>Key Skills</th>
-                        <th>Degree</th>
-                        <th>Location</th>
-                        <th>Resume</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for candidate in candidates %}
-                    <tr>
-                        <td>{{ candidate.full_name }}</td>
-                        <td>{{ candidate.total_experience }}</td>
-                        <td>{{ candidate.key_skills }}</td>
-                        <td>{{ candidate.degree }}</td>
-                        <td>{{ candidate.location }}</td>
-                        <td>
-                            {% if candidate.resume and candidate.resume.resume %}
-                                <a href="{{ candidate.resume.resume.url }}" class="btn-download" target="_blank">Download</a>
-                            {% else %}
-                                No Resume
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="6" class="text-center">No candidates found.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% endif %}
+    <!-- Candidates Table -->
+    {% if candidates %}
+    <div class="table-responsive mt-4">
+        <h5>👥 Search Results</h5>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Experience</th>
+                    <th>Key Skills</th>
+                    <th>Degree</th>
+                    <th>Location</th>
+                    <th>Resume</th>
+                    <th>Select</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for candidate in candidates %}
+                <tr>
+                    <td>{{ candidate.full_name }}</td>
+                    <td>{{ candidate.total_experience }}</td>
+                    <td>{{ candidate.key_skills }}</td>
+                    <td>{{ candidate.degree }}</td>
+                    <td>{{ candidate.location }}</td>
+                    <td>
+                        {% if candidate.resume and candidate.resume.resume %}
+                            <a href="{{ candidate.resume.resume.url }}" class="btn-download" target="_blank">Download</a>
+                        {% else %}
+                            No Resume
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if candidate.id in selected_candidate_ids %}
+                            <button class="btn btn-secondary btn-sm" disabled>✅ Selected</button>
+                        {% else %}
+                            <button class="btn btn-success btn-sm select-btn" data-id="{{ candidate.id }}">✔️ Select</button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center">No candidates found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+    {% endif %}
+</div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const selectButtons = document.querySelectorAll('.select-btn');
+    const successMessage = document.getElementById('successMessage');
+
+    function showMessage(message, type = 'success') {
+        successMessage.classList.remove('alert-success', 'alert-warning');
+        successMessage.classList.add(`alert-${type}`);
+        successMessage.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" onclick="hideMessage()"></button>
+        `;
+        successMessage.style.display = 'block';
+        setTimeout(() => { successMessage.style.display = 'none'; }, 3000);
+    }
+
+    function hideMessage() {
+        successMessage.style.display = 'none';
+    }
+
+    selectButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const candidateId = button.getAttribute('data-id');
+
+            fetch("{% url 'select_candidate_ajax' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+                body: JSON.stringify({ candidate_id: candidateId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage(data.message, 'success');
+                    button.disabled = true;
+                    button.classList.remove('btn-success');
+                    button.classList.add('btn-secondary');
+                    button.innerText = "✅ Selected";
+                } else {
+                    showMessage(data.message, 'warning');
+                }
+            });
+        });
+    });
+</script>
 
 </body>
 </html>
